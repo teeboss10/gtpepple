@@ -1055,6 +1055,29 @@
    font: 12px/1.5 "Trebuchet MS", Arial, sans-serif
  }
 
+ .coming-soon-notice {
+   position: fixed;
+   right: max(18px, env(safe-area-inset-right));
+   bottom: max(18px, env(safe-area-inset-bottom));
+   z-index: 1100;
+   max-width: min(360px, calc(100vw - 36px));
+   padding: 14px 18px;
+   border-left: 4px solid var(--g);
+   background: #fff;
+   color: var(--g2);
+   box-shadow: 0 8px 28px rgba(0, 0, 0, .18);
+   opacity: 0;
+   visibility: hidden;
+   transform: translateY(8px);
+   transition: opacity .2s ease, transform .2s ease, visibility .2s ease
+ }
+
+ .coming-soon-notice.is-visible {
+   opacity: 1;
+   visibility: visible;
+   transform: translateY(0)
+ }
+
  body.welcome-open {
    overflow: hidden
  }

@@ -99,6 +99,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  let comingSoonTimer;
+  document.querySelectorAll('.dice-game-link').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      let notice = document.getElementById('coming-soon-notice');
+
+      if (!notice) {
+        notice = document.createElement('div');
+        notice.id = 'coming-soon-notice';
+        notice.className = 'coming-soon-notice';
+        notice.setAttribute('role', 'status');
+        notice.setAttribute('aria-live', 'polite');
+        document.body.append(notice);
+      }
+
+      notice.textContent = 'Dice Game coming soon.';
+      notice.classList.add('is-visible');
+      window.clearTimeout(comingSoonTimer);
+      comingSoonTimer = window.setTimeout(() => notice.classList.remove('is-visible'), 3000);
+    });
+  });
+
   const revealElements = document.querySelectorAll('.rv');
   if ('IntersectionObserver' in window) {
     const revealObserver = new IntersectionObserver((entries) => {
