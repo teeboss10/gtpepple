@@ -121,6 +121,94 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  document.querySelectorAll('.capture-track').forEach((track) => {
+    const imageGroup = track.querySelector('.capture-group');
+    if (!imageGroup) return;
+
+    const loopGroup = imageGroup.cloneNode(true);
+    loopGroup.setAttribute('aria-hidden', 'true');
+    loopGroup.querySelectorAll('img').forEach((image) => image.setAttribute('alt', ''));
+    track.append(loopGroup);
+  });
+
+  const allAwardFigures = [...document.querySelectorAll('.capture-group:not([aria-hidden="true"]) figure')];
+  const awardFigures = [...new Map(allAwardFigures.map((figure) => {
+    const image = figure.querySelector('img');
+    return [image.currentSrc || image.src, figure];
+  })).values()];
+  const awardViewer = document.getElementById('award-viewer');
+  if (awardFigures.length && awardViewer) {
+    const viewerDialog = awardViewer.querySelector('.award-viewer-dialog');
+    const viewerImage = document.getElementById('award-viewer-image');
+    const viewerCaption = document.getElementById('award-viewer-caption');
+    const viewerCount = document.getElementById('award-viewer-count');
+    const closeButton = awardViewer.querySelector('.award-viewer-close');
+    const previousButton = awardViewer.querySelector('.award-viewer-prev');
+    const nextButton = awardViewer.querySelector('.award-viewer-next');
+    let activeAwardIndex = 0;
+    let previousAwardFocus;
+
+    function showAward(index) {
+      activeAwardIndex = (index + awardFigures.length) % awardFigures.length;
+      const sourceImage = awardFigures[activeAwardIndex].querySelector('img');
+      viewerImage.src = sourceImage.currentSrc || sourceImage.src;
+      viewerImage.alt = sourceImage.alt;
+      viewerCaption.textContent = sourceImage.alt;
+      viewerCount.textContent = `${activeAwardIndex + 1} of ${awardFigures.length}`;
+    }
+
+    function closeAwardViewer() {
+      awardViewer.hidden = true;
+      awardViewer.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('award-viewer-open');
+      viewerImage.removeAttribute('src');
+      if (previousAwardFocus) previousAwardFocus.focus();
+    }
+
+    function openAwardViewer(figure) {
+      previousAwardFocus = figure;
+      const clickedImage = figure.querySelector('img');
+      const clickedSource = clickedImage.currentSrc || clickedImage.src;
+      const uniqueIndex = awardFigures.findIndex((item) => {
+        const image = item.querySelector('img');
+        return (image.currentSrc || image.src) === clickedSource;
+      });
+      showAward(uniqueIndex);
+      awardViewer.hidden = false;
+      awardViewer.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('award-viewer-open');
+      closeButton.focus();
+    }
+
+    allAwardFigures.forEach((figure) => {
+      figure.tabIndex = 0;
+      figure.setAttribute('role', 'button');
+      figure.setAttribute('aria-label', `View larger: ${figure.querySelector('img').alt}`);
+      figure.addEventListener('click', () => openAwardViewer(figure));
+      figure.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openAwardViewer(figure);
+        }
+      });
+    });
+
+    awardViewer.querySelectorAll('[data-award-viewer-close]').forEach((element) => {
+      element.addEventListener('click', closeAwardViewer);
+    });
+    closeButton.addEventListener('click', closeAwardViewer);
+    previousButton.addEventListener('click', () => showAward(activeAwardIndex - 1));
+    nextButton.addEventListener('click', () => showAward(activeAwardIndex + 1));
+    viewerDialog.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') showAward(activeAwardIndex - 1);
+      if (event.key === 'ArrowRight') showAward(activeAwardIndex + 1);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (awardViewer.hidden) return;
+      if (event.key === 'Escape') closeAwardViewer();
+    });
+  }
+
   const revealElements = document.querySelectorAll('.rv');
   if ('IntersectionObserver' in window) {
     const revealObserver = new IntersectionObserver((entries) => {

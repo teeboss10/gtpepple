@@ -2226,6 +2226,271 @@
    margin: 0
  }
 
+ .capture-section {
+   overflow: hidden;
+   padding: var(--sec) 0;
+   background: var(--tint)
+ }
+
+ .capture-intro {
+   max-width: 1120px;
+   margin: 0 auto 34px;
+   padding: 0 var(--pad)
+ }
+
+ .capture-heading {
+   margin-bottom: 10px
+ }
+
+ .capture-sub {
+   color: var(--muted);
+   font-size: 18px
+ }
+
+ .capture-strip {
+   overflow: hidden;
+   margin-top: 16px;
+   padding: 4px 0
+ }
+
+ .capture-track,
+ .capture-group {
+   display: flex;
+   width: max-content;
+   align-items: stretch;
+   gap: 16px
+ }
+
+ .capture-track {
+   animation: award-scroll 100s linear infinite
+ }
+
+ .capture-strip-reverse .capture-track {
+   animation-direction: reverse;
+   animation-duration: 115s
+ }
+
+ .capture-strip:hover .capture-track {
+   animation-play-state: paused
+ }
+
+ .capture-group figure {
+   display: grid;
+   flex: 0 0 220px;
+   width: 220px;
+   height: 280px;
+   place-items: center;
+   padding: 8px;
+   border: 1px solid var(--line);
+   background: #fff;
+   box-shadow: 0 6px 18px rgba(7, 61, 27, .08)
+ }
+
+ .capture-group img {
+   width: 100%;
+   height: 100%;
+   object-fit: contain
+ }
+
+ .capture-group:not([aria-hidden="true"]) figure {
+   cursor: zoom-in
+ }
+
+ .capture-group:not([aria-hidden="true"]) figure:focus-visible {
+   outline: 3px solid var(--g);
+   outline-offset: 3px
+ }
+
+ .award-viewer[hidden] {
+   display: none
+ }
+
+ .award-viewer {
+   position: fixed;
+   inset: 0;
+   inset: 0 0 auto;
+   z-index: 1200;
+   display: grid;
+   place-items: center;
+   width: 100%;
+   height: 100vh;
+   height: 100dvh;
+   padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left))
+ }
+
+ .award-viewer-backdrop {
+   position: absolute;
+   inset: 0;
+   background: rgba(8, 24, 15, .88)
+ }
+
+ .award-viewer-dialog {
+   position: relative;
+   z-index: 1;
+   display: grid;
+   grid-template-columns: 52px minmax(0, 1fr) 52px;
+   grid-template-rows: 42px minmax(0, 1fr) 28px;
+   align-items: center;
+   width: min(100%, 1120px);
+   max-height: 100%;
+   height: min(100%, 900px);
+   min-height: 0;
+   padding: 14px;
+   background: #fff;
+   box-shadow: 0 24px 80px rgba(0, 0, 0, .4)
+ }
+
+ .award-viewer-close {
+   grid-column: 3;
+   justify-self: end;
+   width: 42px;
+   height: 42px;
+   border: 0;
+   background: transparent;
+   color: var(--g2);
+   font: 32px/1 Arial, sans-serif;
+   cursor: pointer
+ }
+
+ .award-viewer-dialog figure {
+   grid-column: 1 / -1;
+   grid-row: 2;
+   display: grid;
+   min-width: 0;
+   min-height: 0;
+   height: 100%;
+   overflow: hidden;
+   grid-template-rows: minmax(0, 1fr) auto;
+   justify-items: center;
+   align-items: center;
+   gap: 10px
+ }
+
+ .award-viewer-dialog figure img {
+   width: 100%;
+   height: 100%;
+   min-height: 0;
+   object-fit: contain
+ }
+
+ .award-viewer-dialog figcaption {
+   max-width: min(90%, 760px);
+   max-height: 4.2em;
+   overflow: auto;
+   color: var(--ink);
+   font-size: 14px;
+   line-height: 1.4;
+   text-align: center
+ }
+
+ .award-viewer-nav {
+   position: relative;
+   z-index: 1;
+   grid-row: 2;
+   width: 44px;
+   height: 56px;
+   border: 1px solid var(--line);
+   background: rgba(255, 255, 255, .94);
+   color: var(--g2);
+   font: 40px/1 "Lato", sans-serif;
+   cursor: pointer
+ }
+
+ .award-viewer-prev {
+   grid-column: 1;
+   justify-self: start
+ }
+
+ .award-viewer-next {
+   grid-column: 3;
+   justify-self: end
+ }
+
+ .award-viewer-count {
+   grid-column: 1 / -1;
+   grid-row: 3;
+   color: var(--muted);
+   font-size: 12px;
+   text-align: center
+ }
+
+ .award-viewer button:focus-visible {
+   outline: 3px solid #6aa87c;
+   outline-offset: 2px
+ }
+
+ body.award-viewer-open {
+   overflow: hidden
+ }
+
+ @media (max-width: 600px) {
+   .award-viewer {
+     padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left))
+   }
+
+   .award-viewer-dialog {
+     grid-template-columns: 42px minmax(0, 1fr) 42px;
+     width: 100%;
+     height: min(100%, 760px);
+     padding: 8px
+   }
+
+   .award-viewer-nav {
+     width: 38px;
+     height: 48px
+   }
+
+   .award-viewer-dialog figcaption {
+     font-size: 12px
+   }
+ }
+
+ @media (max-height: 520px) {
+   .award-viewer-dialog {
+     grid-template-rows: 36px minmax(0, 1fr) 22px;
+     padding: 6px
+   }
+
+   .award-viewer-close {
+     width: 36px;
+     height: 36px
+   }
+
+   .award-viewer-nav {
+     width: 36px;
+     height: 44px
+   }
+
+   .award-viewer-dialog figcaption {
+     max-height: 2.8em;
+     font-size: 12px
+   }
+ }
+
+ @keyframes award-scroll {
+   to {
+     transform: translateX(-50%)
+   }
+ }
+
+ @media (max-width: 600px) {
+   .capture-group figure {
+     flex-basis: 176px;
+     width: 176px;
+     height: 228px
+   }
+ }
+
+ @media (prefers-reduced-motion: reduce) {
+   .capture-strip {
+     overflow-x: auto
+   }
+
+   .capture-track {
+     animation: none
+   }
+ }
+
  .strip:hover .strip-track,
  .strip:focus-within .strip-track {
    animation-play-state: paused
